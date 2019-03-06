@@ -13,7 +13,7 @@ npm install @yesiree/collaboration
 The library is designed so that you can use just the pieces you need. To use one of the included utilities, just require that specific utility:
 
 ```
-const Revision = require('@yesiree/collaboration/revision')
+const Revision = require('@yesiree/collaboration/lib/revision')
 
 ...
 ```
