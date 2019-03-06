@@ -1,10 +1,11 @@
 {
   "name": "@yesiree/collaboration",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A collection of utilities for managing collaborative editing experiences online.",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "deploy": "npm test && npm publish --access public"
   },
   "repository": {
     "type": "git",
