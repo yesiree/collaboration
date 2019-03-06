@@ -1,0 +1,33 @@
+{
+  "name": "@yesiree/collaboration",
+  "version": "0.1.0",
+  "description": "A collection of utilities for managing collaborative editing experiences online.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yesiree/collaboration.git"
+  },
+  "keywords": [
+    "collaborative",
+    "collaboration",
+    "edit",
+    "editor",
+    "editing",
+    "online",
+    "utility",
+    "operational",
+    "transformation"
+  ],
+  "author": "yesiree foundation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yesiree/collaboration/issues"
+  },
+  "homepage": "https://github.com/yesiree/collaboration#readme",
+  "devDependencies": {
+    "jasmine": "^3.3.1"
+  }
+}
