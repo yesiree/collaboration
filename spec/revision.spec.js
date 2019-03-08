@@ -1,5 +1,5 @@
 describe('Revision', () => {
-  const Revision = require('../lib/revision.js')
+  const { Revision } = require('../revision')
 
   beforeEach(function () {
 

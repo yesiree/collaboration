@@ -147,7 +147,7 @@ Revision.prototype.getOperations = function () {
   return this.toOps()
 }
 
-Revision.fromOps = function () {
+Revision.fromOps = function (ops) {
   var rev = new Revision()
   for (var i = 0, l = ops.length; i < l; i++) {
     var op = ops[i]
@@ -357,4 +357,4 @@ Revision.getType = function (op) {
     : 'insert'
 }
 
-module.exports = Revision
+module.exports = { Revision }

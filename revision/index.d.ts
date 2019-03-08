@@ -1,13 +1,9 @@
+export { Revision };
+
 declare class Revision {
     constructor()
 
     applyTo(str: string): string
-
-    compose(...revs: Revision[]): Revision
-
-    equals(rev2: Revision): boolean
-
-    getOperations(): (number | string)[]
 
     insert(str: string): Revision
 
@@ -17,13 +13,23 @@ declare class Revision {
 
     reverse(str: string): Revision
 
-    serialize(): string
+    compose(...revs: Revision[]): Revision
 
     static compose(...revs: Revision[]): Revision
 
+    static transform(revA: Revision, revB: Revision): Revision[]
+
+    toOps(): (number | string)[]
+
+    static fromOps(ops: (number | string)[]): Revision
+
+    serialize(): string
+
     static deserialize(ops: (number | string)[]): Revision
+
+    equals(revB: Revision): boolean
 
     static getType(op: number | string): string
 
-    static transform(rev1: Revision, rev2: Revision): Revision[]
+
 }
