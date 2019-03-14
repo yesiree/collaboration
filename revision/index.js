@@ -6,10 +6,10 @@ function Revision() {
 
 Revision.prototype.applyTo = function (str) {
   if (typeof str !== 'string') {
-    throw new Error("Cannot apply revision to non-string value.")
+    throw new Error(`Cannot apply revision to non-string value.`)
   }
   if (str.length !== this.startLength) {
-    throw new Error("Cannot apply revision with start length of '" + this.startLength + "' to string of length '" + str.length + "'. Lengths must be equal.")
+    throw new RevisionError(`Cannot apply revision with start length of '${this.startLength}' to string of length '${str.length}'. Lengths must be equal.`)
   }
   const pieces = []
   let pos = 0
@@ -22,14 +22,14 @@ Revision.prototype.applyTo = function (str) {
       pos += -op
     } else {
       if (pos + op > str.length) {
-        throw new Error("Failed to apply revision to string. Revision start length was incorrect (1).")
+        throw new Error(`Failed to apply revision to string. Revision start length was incorrect (1).`)
       }
       pieces.push(str.substring(pos, pos + op))
       pos += op
     }
   }
   if (pos !== str.length) {
-    throw new Error("Failed to apply revision to string. Revision start length was incorrect (2).")
+    throw new Error(`Failed to apply revision to string. Revision start length was incorrect (2).`)
   }
   return pieces.join('')
 }
@@ -55,7 +55,7 @@ Revision.prototype.reverse = function (str) {
 
 Revision.prototype.retain = function (count) {
   if (typeof count !== 'number') {
-    throw new Error("Parameter 'count' must be of type 'number'.")
+    throw new Error(`Parameter 'count' must be of type 'number'.`)
   }
   if (count === 0) return
   this.startLength += count
@@ -72,7 +72,7 @@ Revision.prototype.retain = function (count) {
 
 Revision.prototype.insert = function (str) {
   if (typeof str !== 'string') {
-    throw new Error("Parameter 'str' must be of type 'string'.")
+    throw new Error(`Parameter 'str' must be of type 'string'.`)
   }
   if (str === '') return
   this.endLength += str.length
@@ -97,7 +97,7 @@ Revision.prototype.insert = function (str) {
 
 Revision.prototype.remove = function (count) {
   if (typeof count !== 'number') {
-    throw new Error("Parameter 'count' must be of type 'integer'.")
+    throw new Error(`Parameter 'count' must be of type 'integer'.`)
   }
   if (count === 0) return
   if (count > 0) count = -count
@@ -171,7 +171,7 @@ Revision.compose = function (...revs) {
   if (current && !next) return current
   while (next !== void 0) {
     if (current.endLength !== next.startLength) {
-      throw new Error("Cannot compose revisions where first revision end length (" + current.endLength + ") does not match second revision start length (" + next.startLength + ").")
+      throw new RevisionError(`Cannot compose revisions where first revision end length (${current.endLength}) does not match second revision start length (${next.startLength}).`)
     }
     combined = new Revision()
     var i1 = 0, i2 = 0
@@ -191,7 +191,7 @@ Revision.compose = function (...revs) {
         continue
       }
       if (op1 === void 0 || op2 === void 0) {
-        throw new Error("Failed to compose revisions. One of the revisions is too short.")
+        throw new RevisionError(`Failed to compose revisions. One of the revisions is too short.`)
       }
       if (type1 === 'retain' && type2 === 'retain') {
         if (op1 > op2) {
@@ -247,7 +247,7 @@ Revision.compose = function (...revs) {
           op1 = current.ops[i1++]
         }
       } else {
-        throw Error("OT:compose(...revs): This shouldn't happen!")
+        throw Error(`OT:compose(...revs): This shouldn't happen!`)
       }
     }
     current = combined
@@ -258,7 +258,7 @@ Revision.compose = function (...revs) {
 
 Revision.transform = function (rev1, rev2) {
   if (rev1.startLength !== rev2.startLength) {
-    throw new Error("Cannot transform two revisions with different start lengths.")
+    throw new RevisionError(`Cannot transform two revisions where first revision start length is '${rev1.startLength}' and second revision start length is '${rev2.startLength}'.`)
   }
   var prime1 = new Revision()
   var prime2 = new Revision()
@@ -281,7 +281,7 @@ Revision.transform = function (rev1, rev2) {
       continue
     }
     if (op1 === void 0 || op2 === void 0) {
-      throw new Error("Cannot transform revisions. The " + (op1 === void 0 ? 'first' : 'second') + " revision is too short.")
+      throw new RevisionError(`Cannot transform revisions. The ${(op1 === void 0 ? 'first' : 'second')} revision is too short.`)
     }
     var min = void 0
     if (type1 === 'retain' && type2 === 'retain') {
@@ -342,7 +342,7 @@ Revision.transform = function (rev1, rev2) {
       }
       prime2.remove(min)
     } else {
-      throw new Error("This should not be possible.")
+      throw new Error(`This should not be possible.`)
     }
   }
   return [prime1, prime2]
@@ -357,4 +357,13 @@ Revision.getType = function (op) {
     : 'insert'
 }
 
-module.exports = { Revision }
+class RevisionError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'RevisionError'
+  }
+}
+
+
+
+module.exports = { Revision, RevisionError }
