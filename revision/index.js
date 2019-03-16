@@ -57,6 +57,9 @@ Revision.prototype.retain = function (count) {
   if (typeof count !== 'number') {
     throw new Error(`Parameter 'count' must be of type 'number'.`)
   }
+  if (count < 0) {
+    throw new Error(`Parameter 'count' must be positive integer.`)
+  }
   if (count === 0) return
   this.startLength += count
   this.endLength += count
