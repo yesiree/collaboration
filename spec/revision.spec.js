@@ -64,7 +64,7 @@ describe('Revision', () => {
       new Revision().retain(5).remove(1).insert('-').retain(5),
       new Revision().retain(9).insert('d ba').retain(2)
     ]
-    const revA = Revision.compose(revsA)
+    const revA = Revision.compose(...revsA)
     const revB = new Revision().retain(5).remove(6).insert('!')
     const [primeA, primeB] = Revision.transform(revA, revB)
 

@@ -1,6 +1,6 @@
 {
   "name": "@yesiree/collaboration",
-  "version": "0.6.3",
+  "version": "0.6.5",
   "description": "A collection of utilities for managing collaborative editing experiences online.",
   "main": "index.js",
   "scripts": {

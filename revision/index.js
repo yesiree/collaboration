@@ -155,13 +155,10 @@ Revision.fromOps = function (ops) {
 }
 
 Revision.prototype.compose = function (...revs) {
-  Revision.compose(revs)
+  return Revision.compose(this, ...revs)
 }
 
 Revision.compose = function (...revs) {
-  if (revs.length === 1 && Array.isArray(revs[0])) {
-    revs = revs[0]
-  }
   var current = revs.shift()
   var next = revs.shift()
   var combined
