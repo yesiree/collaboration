@@ -6,7 +6,7 @@ function Revision() {
 
 Revision.prototype.applyTo = function (str) {
   if (typeof str !== 'string') {
-    throw new Error(`Cannot apply revision to non-string value.`)
+    throw new Error(`Cannot apply revision to non-string value. Found '${str}' with type '${typeof str}'.`)
   }
   if (str.length !== this.startLength) {
     throw new RevisionError(`Cannot apply revision with start length of '${this.startLength}' to string of length '${str.length}'. Lengths must be equal.`)
@@ -55,10 +55,10 @@ Revision.prototype.reverse = function (str) {
 
 Revision.prototype.retain = function (count) {
   if (typeof count !== 'number') {
-    throw new Error(`Parameter 'count' must be of type 'number'.`)
+    throw new Error(`Parameter 'count' must be of type 'number'. Found '${count}' with type '${typeof count}'.`)
   }
   if (count < 0) {
-    throw new Error(`Parameter 'count' must be positive integer.`)
+    throw new Error(`Parameter 'count' must be positive integer. Found '${count}'.`)
   }
   if (count === 0) return
   this.startLength += count
@@ -75,7 +75,7 @@ Revision.prototype.retain = function (count) {
 
 Revision.prototype.insert = function (str) {
   if (typeof str !== 'string') {
-    throw new Error(`Parameter 'str' must be of type 'string'.`)
+    throw new Error(`Parameter 'str' must be of type 'string'. Found '${str}' with type '${typeof str}'.`)
   }
   if (str === '') return
   this.endLength += str.length
@@ -100,7 +100,7 @@ Revision.prototype.insert = function (str) {
 
 Revision.prototype.remove = function (count) {
   if (typeof count !== 'number') {
-    throw new Error(`Parameter 'count' must be of type 'integer'.`)
+    throw new Error(`Parameter 'count' must be of type 'integer'. Found '${count}' with type '${typeof count}'.`)
   }
   if (count === 0) return
   if (count > 0) count = -count
@@ -134,7 +134,7 @@ Revision.prototype.serialize = function () {
 
 Revision.deserialize = function (ops) {
   if (typeof ops !== 'string') {
-    throw new Error(`Cannot deserialize from non-string type.`)
+    throw new Error(`Cannot deserialize from non-string type. Found '${ops}' with type '${typeof ops}'.`)
   }
   ops = JSON.parse(ops)
   return Revision.fromOps(ops)
@@ -142,12 +142,6 @@ Revision.deserialize = function (ops) {
 
 Revision.prototype.toOps = function () {
   return this.ops.slice()
-}
-Revision.prototype.getOperations = function () {
-  if (console && typeof console.warn === 'function') {
-    console.warn(`@Deprecated: 'revision.getOperations'. Use 'revision.toOps' instead.`)
-  }
-  return this.toOps()
 }
 
 Revision.fromOps = function (ops) {
