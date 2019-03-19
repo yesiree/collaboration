@@ -159,6 +159,7 @@ Revision.prototype.compose = function (...revs) {
 }
 
 Revision.compose = function (...revs) {
+  // TODO ensure each revision is of type Revision, deal with cases where array of Revisions is passed
   let current = revs.shift()
   let next = revs.shift()
   let combined
