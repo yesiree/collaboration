@@ -105,8 +105,8 @@ Revision.prototype.remove = function (count) {
   if (count === 0) return
   if (count > 0) count = -count
   this.startLength -= count
-  var backOne = this.ops.length - 1
-  var last = this.ops[backOne]
+  const backOne = this.ops.length - 1
+  const last = this.ops[backOne]
   if (typeof last === 'number' && last < 0) {
     this.ops[backOne] += count
   } else {
@@ -116,13 +116,13 @@ Revision.prototype.remove = function (count) {
 }
 
 Revision.prototype.equals = function (rev2) {
-  var rev1 = this
+  const rev1 = this
   if (rev1.startLength !== rev2.startLength ||
     rev1.endLength !== rev2.endLength ||
     rev1.ops.length !== rev2.ops.length) {
     return false
   }
-  for (var i = 0, l = rev1.ops.length; i < l; i++) {
+  for (let i = 0, l = rev1.ops.length; i < l; i++) {
     if (rev1.ops[i] !== rev2.ops[i]) return false
   }
   return true
@@ -145,10 +145,10 @@ Revision.prototype.toOps = function () {
 }
 
 Revision.fromOps = function (ops) {
-  var rev = new Revision()
-  for (var i = 0, l = ops.length; i < l; i++) {
-    var op = ops[i]
-    var type = Revision.getType(op)
+  const rev = new Revision()
+  for (let i = 0, l = ops.length; i < l; i++) {
+    const op = ops[i]
+    const type = Revision.getType(op)
     rev[type](op)
   }
   return rev
@@ -159,21 +159,22 @@ Revision.prototype.compose = function (...revs) {
 }
 
 Revision.compose = function (...revs) {
-  var current = revs.shift()
-  var next = revs.shift()
-  var combined
+  let current = revs.shift()
+  let next = revs.shift()
+  let combined
+  let index = 0
   if (current && !next) return current
   while (next !== void 0) {
     if (current.endLength !== next.startLength) {
-      throw new RevisionError(`Cannot compose revisions where first revision end length (${current.endLength}) does not match second revision start length (${next.startLength}).`)
+      throw new RevisionError(`Cannot compose revisions where revision ${index} end length (${current.endLength}) does not match revision ${index + 1} start length (${next.startLength}).`)
     }
     combined = new Revision()
-    var i1 = 0, i2 = 0
-    var op1 = current.ops[i1++]
-    var op2 = next.ops[i2++]
+    let i1 = 0, i2 = 0
+    let op1 = current.ops[i1++]
+    let op2 = next.ops[i2++]
     while (!(op1 === void 0 && op2 === void 0)) {
-      var type1 = Revision.getType(op1)
-      var type2 = Revision.getType(op2)
+      let type1 = Revision.getType(op1)
+      let type2 = Revision.getType(op2)
       if (type1 === 'remove') {
         combined.remove(op1)
         op1 = current.ops[i1++]
@@ -246,6 +247,7 @@ Revision.compose = function (...revs) {
     }
     current = combined
     next = revs.shift()
+    index++
   }
   return combined
 }
@@ -254,14 +256,14 @@ Revision.transform = function (rev1, rev2) {
   if (rev1.startLength !== rev2.startLength) {
     throw new RevisionError(`Cannot transform two revisions where first revision start length is '${rev1.startLength}' and second revision start length is '${rev2.startLength}'.`)
   }
-  var prime1 = new Revision()
-  var prime2 = new Revision()
-  var i1 = 0, i2 = 0
-  var op1 = rev1.ops[i1++]
-  var op2 = rev2.ops[i2++]
+  const prime1 = new Revision()
+  const prime2 = new Revision()
+  let i1 = 0, i2 = 0
+  let op1 = rev1.ops[i1++]
+  let op2 = rev2.ops[i2++]
   while (!(op1 === void 0 && op2 === void 0)) {
-    var type1 = Revision.getType(op1)
-    var type2 = Revision.getType(op2)
+    let type1 = Revision.getType(op1)
+    let type2 = Revision.getType(op2)
     if (type1 === 'insert') {
       prime1.insert(op1)
       prime2.retain(op1.length)
@@ -277,7 +279,7 @@ Revision.transform = function (rev1, rev2) {
     if (op1 === void 0 || op2 === void 0) {
       throw new RevisionError(`Cannot transform revisions. The ${(op1 === void 0 ? 'first' : 'second')} revision is too short.`)
     }
-    var min = void 0
+    let min = void 0
     if (type1 === 'retain' && type2 === 'retain') {
       if (op1 > op2) {
         min = op2
@@ -357,7 +359,5 @@ class RevisionError extends Error {
     this.name = 'RevisionError'
   }
 }
-
-
 
 module.exports = { Revision, RevisionError }
