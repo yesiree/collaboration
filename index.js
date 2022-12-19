@@ -1,1 +1,3 @@
-export * from './revision/index.js'
+const revision = require('./revision/index.js')
+
+module.exports.revision = revision
